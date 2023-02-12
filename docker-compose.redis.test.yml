@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  redis_test:
+    container_name: redis_test
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    environment:
+      REDIS_HOST: redis_test
+      REDIS_PORT: 6379
+      REDIS_USER: admin
+      REDIS_PASSWORD: admin
