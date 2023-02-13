@@ -31,12 +31,12 @@ describe('SessionClient', () => {
       await client.disconnect();
     } catch (e) {
       expect(e.message).toContain(
-        'Error: WRONGPASS invalid username-password pair or user is disabled',
+        'WRONGPASS invalid username-password pair or user is disabled',
       );
     }
   });
 
-  it('should failed duo to incorrect redis host  ', async () => {
+  it('should failed duo to incorrect redis host', async () => {
     try {
       client = new SessionClient({
         url: wrongHostUrl,
@@ -47,7 +47,7 @@ describe('SessionClient', () => {
       await client.disconnect();
       expect(checkedSession).toBe('sdsv');
     } catch (e) {
-      expect(e.message).toContain('Error: Connection timeout');
+      expect(e.message).toContain('Connection timeout');
     }
   });
 
