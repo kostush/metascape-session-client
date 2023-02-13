@@ -1,6 +1,11 @@
 image: node:16.16.0
 
 definitions:
+  services:
+    redis:
+      image: redis
+      environment:
+        REDIS_PASSWORD: admin
   steps:
     - step: &Code-quality-step
         name: Run code quality
@@ -17,6 +22,8 @@ definitions:
         script:
           - npm install
           - npm run test
+        services:
+          - redis
 pipelines:
   default:
     - step: *Code-quality-step
