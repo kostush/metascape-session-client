@@ -1,0 +1,24 @@
+image: node:16.16.0
+
+definitions:
+  steps:
+    - step: &Code-quality-step
+        name: Run code quality
+        script:
+          - npm install
+          - npm run lint
+    - step: &Build-step
+        name: Run build
+        script:
+          - npm install
+          - npm run build
+    - step: &Test-step
+        name: Run tests
+        script:
+          - npm install
+          - npm run test
+pipelines:
+  default:
+    - step: *Code-quality-step
+    - step: *Build-step
+    - step: *Test-step
