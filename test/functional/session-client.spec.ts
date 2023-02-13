@@ -1,47 +1,85 @@
 import { SessionClient } from '../../src';
+import * as process from 'process';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 
 describe('SessionClient', () => {
   let client: SessionClient;
-  const url = 'redis://default:admin@redis_test:6379';
+  const password = process.env.REDIS_PASSWORD;
+  const host = process.env.REDIS_HOST;
+  const user = process.env.REDIS_USER;
+  const url = 'redis://default:' + password + '@' + host;
+  const wrongHostUrl = 'redis://default:' + password + '@' + 'wrong_host';
+  const wrongPasswordUrl =
+    'redis://' + user + ':' + 'wrongPassword' + '@' + host;
   const sessionId = '1fd3583c-11c2-4486-87c3-7e714ea95703';
   const tokenId = '33725b85-480a-4f09-bd42-2f7a53c7ab67';
+  const updatedToken = '55525b85-480a-4f09-bd42-2f7a53c7ab67';
+  const session = { tokenId: tokenId };
+  const updatedSession = { tokenId: updatedToken };
 
   afterAll(async () => {
     // Stop mock server with 3 endpoint
     client.disconnect();
   });
-  it('should failed duo to incorrect passord session ', async () => {
+  it('should failed duo to incorrect redis password ', async () => {
     try {
       client = new SessionClient({
-        url: 'redis://admin:wrongPassword@redis_test:6379',
+        url: wrongPasswordUrl,
       });
       await client.connect();
-      await client.setSession(sessionId, tokenId);
-      const checkedSession = await client.getsession(sessionId);
+      await client.setSession(sessionId, session);
+      await client.getSession(sessionId);
       await client.disconnect();
-      expect(checkedSession).toBe('sdsv');
     } catch (e) {
       expect(e.context.toString()).toContain(
         'Error: WRONGPASS invalid username-password pair or user is disabled',
       );
     }
-    await client.disconnect();
-    //expect(checkedSession).toBe('sdsv');
   });
 
-  it('should set session ', async () => {
+  it('should failed duo to incorrect redis host  ', async () => {
+    try {
+      client = new SessionClient({
+        url: wrongHostUrl,
+      });
+      await client.connect();
+      await client.setSession(sessionId, session);
+      const checkedSession = await client.getSession(sessionId);
+      await client.disconnect();
+      expect(checkedSession).toBe('sdsv');
+    } catch (e) {
+      expect(e.context.toString()).toContain('Error: Connection timeout');
+    }
+  });
+
+  it('should set session succesfully', async () => {
     client = new SessionClient({
       url: url,
     });
     await client.connect();
-    await client.setSession(sessionId, tokenId);
-    const checkedSession = await client.getsession(sessionId);
-    expect(checkedSession).toBe(tokenId);
+    await client.setSession(sessionId, session);
+    const checkedSession = await client.getSession(sessionId);
+    await client.disconnect();
+    expect(checkedSession).toEqual(session);
   });
 
-  it('should close session ', async () => {
+  it('should update session succesfully', async () => {
+    client = new SessionClient({
+      url: url,
+    });
+    await client.connect();
+    await client.setSession(sessionId, updatedSession);
+    const checkedSession = await client.getSession(sessionId);
+    await client.disconnect();
+    expect(checkedSession).toEqual(updatedSession);
+    expect(checkedSession.tokenId).toBe(updatedToken);
+  });
+
+  it('should close session succesfully ', async () => {
+    await client.connect();
     await client.closeSession(sessionId);
-    const sessionAfter = await client.getsession(sessionId);
+    const sessionAfter = await client.getSession(sessionId);
+    //await client.disconnect();
     expect(sessionAfter).toBeNull;
   });
 });

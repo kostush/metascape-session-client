@@ -1,3 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const express = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const dotenv = require('dotenv');
+
+dotenv.config({ path: express.join(__dirname, '../.env.test') });
 // Sync object
 const config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
