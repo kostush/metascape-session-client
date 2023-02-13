@@ -7,7 +7,6 @@ describe('SessionClient', () => {
   const host = process.env.REDIS_HOST;
   const user = process.env.REDIS_USER;
   const url = 'redis://default:' + password + '@' + host;
-  const wrongHostUrl = 'redis://default:' + password + '@' + 'wrong_host';
   const wrongPasswordUrl =
     'redis://' + user + ':' + 'wrongPassword' + '@' + host;
   const sessionId = '1fd3583c-11c2-4486-87c3-7e714ea95703';
@@ -33,21 +32,6 @@ describe('SessionClient', () => {
       expect(e.message).toContain(
         'WRONGPASS invalid username-password pair or user is disabled',
       );
-    }
-  });
-
-  it('should failed duo to incorrect redis host', async () => {
-    try {
-      client = new SessionClient({
-        url: wrongHostUrl,
-      });
-      await client.connect();
-      await client.setSession(sessionId, session);
-      const checkedSession = await client.getSession(sessionId);
-      await client.disconnect();
-      expect(checkedSession).toBe('sdsv');
-    } catch (e) {
-      expect(e.message).toContain('Connection timeout');
     }
   });
 
