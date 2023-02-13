@@ -30,7 +30,7 @@ describe('SessionClient', () => {
       await client.getSession(sessionId);
       await client.disconnect();
     } catch (e) {
-      expect(e.context.toString()).toContain(
+      expect(e.message).toContain(
         'Error: WRONGPASS invalid username-password pair or user is disabled',
       );
     }
@@ -47,11 +47,11 @@ describe('SessionClient', () => {
       await client.disconnect();
       expect(checkedSession).toBe('sdsv');
     } catch (e) {
-      expect(e.context.toString()).toContain('Error: Connection timeout');
+      expect(e.message).toContain('Error: Connection timeout');
     }
   });
 
-  it('should set session succesfully', async () => {
+  it('should set session successfully', async () => {
     client = new SessionClient({
       url: url,
     });
@@ -62,7 +62,7 @@ describe('SessionClient', () => {
     expect(checkedSession).toEqual(session);
   });
 
-  it('should update session succesfully', async () => {
+  it('should update session successfully', async () => {
     client = new SessionClient({
       url: url,
     });
@@ -74,7 +74,7 @@ describe('SessionClient', () => {
     expect(checkedSession.tokenId).toBe(updatedToken);
   });
 
-  it('should close session succesfully ', async () => {
+  it('should close session successfully ', async () => {
     await client.connect();
     await client.closeSession(sessionId);
     const sessionAfter = await client.getSession(sessionId);
