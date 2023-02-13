@@ -1,6 +1,5 @@
 import { SessionClient } from '../../src';
 import * as process from 'process';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 
 describe('SessionClient', () => {
   let client: SessionClient;
