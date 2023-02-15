@@ -32,7 +32,7 @@ describe('SessionClient', () => {
       );
     }
   });
-  it('should return undefined then try to close not exist session', async () => {
+  it('should failed when closing not existing session', async () => {
     const result = await client.closeSession('Not_exist_sessionId');
     expect(result).toBeUndefined();
   });

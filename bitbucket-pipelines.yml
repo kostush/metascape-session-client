@@ -3,9 +3,10 @@ image: node:16.16.0
 definitions:
   services:
     redis:
-      image: redis
+      image: bitnami/redis:latest
       environment:
         REDIS_PASSWORD: admin
+        ALLOW_EMPTY_PASSWORD: no
   steps:
     - step: &Code-quality-step
         name: Run code quality

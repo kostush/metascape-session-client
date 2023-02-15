@@ -5,7 +5,7 @@ export declare class SessionClient {
     constructor(configurations?: RedisClientOptions);
     setSession(sessionId: string, tokenId: string): Promise<void>;
     closeSession(sessionId: string): Promise<void>;
-    getSession(sessionId: string): Promise<SessionInterface>;
+    getSession(sessionId: string): Promise<SessionInterface | null>;
     connect(): Promise<void>;
     disconnect(): Promise<void>;
 }

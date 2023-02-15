@@ -5,9 +5,6 @@ services:
     container_name: redis_test
     image: bitnami/redis:latest
     restart: always
-    env_file: .env.test
     environment:
-      - ALLOW_EMPTY_PASSWORD=no
-networks:
-  metascape:
-    name: metascape
+      ALLOW_EMPTY_PASSWORD: no,
+      REDIS_PASSWORD: ${REDIS_PASSWORD}

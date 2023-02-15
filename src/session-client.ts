@@ -18,11 +18,10 @@ export class SessionClient {
     await this.redisClient.del(sessionId);
   }
 
-  async getSession(sessionId: string): Promise<SessionInterface> {
-    const session = JSON.parse(
+  async getSession(sessionId: string): Promise<SessionInterface | null> {
+    return JSON.parse(
       await this.redisClient.get(sessionId),
     ) as SessionInterface;
-    return session;
   }
 
   async connect(): Promise<void> {
