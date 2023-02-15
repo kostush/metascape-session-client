@@ -1,5 +1,5 @@
 DOCKER_COMPOSE_DEV ?= docker-compose -f docker-compose.dev.test.yml -f docker-compose.redis.test.yml
-EXEC_SERVICE ?= docker exec -ti session_client
+EXEC_SERVICE ?= docker exec -ti session-client
 
 env: ## Create env file
 	copy .env.dist .env

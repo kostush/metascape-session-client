@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   session-client:
-    container_name: session_client
+    container_name: session-client
     build:
       context: .
       dockerfile:  ./docker/Dockerfile
@@ -15,4 +15,4 @@ services:
     stdin_open: true # docker run -i
     tty: true # docker run -t
     depends_on:
-      - redis_test
+      - redis-test
