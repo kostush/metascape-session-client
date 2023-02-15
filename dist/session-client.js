@@ -16,8 +16,7 @@ class SessionClient {
         await this.redisClient.del(sessionId);
     }
     async getSession(sessionId) {
-        const session = JSON.parse(await this.redisClient.get(sessionId));
-        return session;
+        return JSON.parse(await this.redisClient.get(sessionId));
     }
     async connect() {
         await this.redisClient.connect();
