@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  session-client:
+    container_name: session-client
+    build:
+      context: .
+      dockerfile:  ./docker/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+#    ports:
+#      - 9229:9229
+    # these two command keeps apline container running
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    depends_on:
+      - redis-test
