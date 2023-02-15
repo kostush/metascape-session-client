@@ -6,5 +6,5 @@ services:
     image: bitnami/redis:latest
     restart: always
     environment:
-      ALLOW_EMPTY_PASSWORD: no,
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      - ALLOW_EMPTY_PASSWORD=no,
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
