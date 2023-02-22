@@ -27,7 +27,9 @@ describe('Session-client-module', () => {
     sessionClient = TestingModule.get<SessionClient>(SessionClient);
   });
   afterAll(async () => {
-    app.close();
+    if (app) {
+      app.close();
+    }
   });
 
   describe('Session Module', () => {
