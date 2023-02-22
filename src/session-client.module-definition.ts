@@ -1,5 +1,5 @@
 import { ConfigurableModuleBuilder } from '@nestjs/common';
-import { SessionClientModuleOptions } from './session-client-module-options';
+import { RedisClientOptions } from '@redis/client/dist/lib/client';
 
 export const { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } =
-  new ConfigurableModuleBuilder<SessionClientModuleOptions>().build();
+  new ConfigurableModuleBuilder<RedisClientOptions>().build();

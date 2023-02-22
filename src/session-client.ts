@@ -15,14 +15,14 @@ export class SessionClient {
   async setSession(
     sessionId: string,
     tokenId: string,
-    expired?: number,
+    expiredInSec?: number,
   ): Promise<void> {
     const sessionJson = JSON.stringify({
       tokenId: tokenId,
     } as SessionInterface);
     let expiredObj = {};
-    if (expired) {
-      expiredObj = { EX: expired };
+    if (expiredInSec) {
+      expiredObj = { EX: expiredInSec };
     }
     await this.redisClient.set(sessionId, sessionJson, expiredObj);
   }
