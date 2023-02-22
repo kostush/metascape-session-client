@@ -1,14 +1,13 @@
 import { createClient } from 'redis';
 import { RedisClientOptions } from '@redis/client/dist/lib/client';
 import { SessionInterface } from './session.interface';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SessionClient {
   private redisClient;
-  constructor(
-    @Inject('CONFIG_OPTIONS') private configurations?: RedisClientOptions,
-  ) {
+
+  constructor(configurations?: RedisClientOptions) {
     this.redisClient = createClient(configurations);
   }
 

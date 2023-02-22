@@ -2,6 +2,7 @@ import { SessionClient } from '../../src';
 import { Test } from '@nestjs/testing';
 import { SessionClientModule } from '../../src/session-client.module';
 import * as process from 'process';
+import { NestApplication } from '@nestjs/core';
 
 describe('Session-client-module', () => {
   let sessionClient: SessionClient;
@@ -15,21 +16,18 @@ describe('Session-client-module', () => {
   const updatedToken = '55525b85-480a-4f09-bd42-2f7a53c7ab67';
   const session = { tokenId: tokenId };
   const updatedSession = { tokenId: updatedToken };
+  let app: NestApplication;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [SessionClientModule],
-      providers: [
-        SessionClient,
-        { provide: 'CONFIG_OPTIONS', useValue: { url: url } },
-      ],
-      exports: [SessionClient],
+    const TestingModule = await Test.createTestingModule({
+      imports: [SessionClientModule.register({ url: url })],
     }).compile();
-    sessionClient = await moduleRef.get<SessionClient>(SessionClient);
-    await sessionClient.connect();
+    app = TestingModule.createNestApplication();
+    await app.init();
+    sessionClient = TestingModule.get<SessionClient>(SessionClient);
   });
   afterAll(async () => {
-    await sessionClient.disconnect();
+    app.close();
   });
 
   describe('Session Module', () => {
@@ -48,7 +46,8 @@ describe('Session-client-module', () => {
         );
       }
     });
-    it('should failed when closing not existing session', async () => {
+
+    it('should not failed when closing not existing session', async () => {
       const result = await sessionClient.closeSession('Not_exist_sessionId');
       expect(result).toBeUndefined();
     });
@@ -65,6 +64,7 @@ describe('Session-client-module', () => {
     });
 
     it('should update session successfully', async () => {
+      await sessionClient.setSession(sessionId, tokenId);
       await sessionClient.setSession(sessionId, updatedToken);
       const checkedSession = await sessionClient.getSession(sessionId);
       expect(checkedSession).toEqual(updatedSession);
@@ -72,6 +72,7 @@ describe('Session-client-module', () => {
     });
 
     it('should close session successfully ', async () => {
+      await sessionClient.setSession(sessionId, tokenId);
       await sessionClient.closeSession(sessionId);
       const sessionAfter = await sessionClient.getSession(sessionId);
       expect(sessionAfter).toBeNull;
