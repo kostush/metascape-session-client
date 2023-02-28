@@ -16,4 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./session-client"), exports);
 __exportStar(require("./session.interface"), exports);
+__exportStar(require("./session-client.module"), exports);
 //# sourceMappingURL=index.js.map
