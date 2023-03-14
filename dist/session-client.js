@@ -38,6 +38,11 @@ let SessionClient = class SessionClient {
     async disconnect() {
         await this.redisClient.disconnect();
     }
+    async closeAllSessions(sessionIds) {
+        await sessionIds.forEach((sessionId) => {
+            this.redisClient.del(sessionId);
+        });
+    }
 };
 SessionClient = __decorate([
     (0, common_1.Injectable)(),

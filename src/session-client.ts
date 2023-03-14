@@ -43,4 +43,10 @@ export class SessionClient {
   async disconnect(): Promise<void> {
     await this.redisClient.disconnect();
   }
+
+  async closeAllSessions(sessionIds: string[]): Promise<void> {
+    await sessionIds.forEach((sessionId) => {
+      this.redisClient.del(sessionId);
+    });
+  }
 }

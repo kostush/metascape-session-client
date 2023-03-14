@@ -8,4 +8,5 @@ export declare class SessionClient {
     getSession(sessionId: string): Promise<SessionInterface | null>;
     connect(): Promise<void>;
     disconnect(): Promise<void>;
+    closeAllSessions(sessionIds: string[]): Promise<void>;
 }

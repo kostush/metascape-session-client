@@ -8,6 +8,8 @@ describe('Session-client-module', () => {
   let sessionClient: SessionClient;
   const sessionId = '1fd3583c-11c2-4486-87c3-7e714ea95703';
   const tokenId = '33725b85-480a-4f09-bd42-2f7a53c7ab67';
+  const session2Id = '4e2bf62f-31ae-40f8-a31d-0beaeaca91b1';
+  const token2Id = 'a96a092c-d8e7-4271-8451-fa24dfc7b02f';
   const password = process.env.REDIS_PASSWORD;
   const wrongPassword = 'wrongPassword';
   const host = process.env.REDIS_HOST;
@@ -78,6 +80,16 @@ describe('Session-client-module', () => {
       await sessionClient.closeSession(sessionId);
       const sessionAfter = await sessionClient.getSession(sessionId);
       expect(sessionAfter).toBeNull;
+    });
+
+    it('should close all session successfully ', async () => {
+      await sessionClient.setSession(sessionId, tokenId);
+      await sessionClient.setSession(session2Id, token2Id);
+      await sessionClient.closeAllSessions([sessionId, session2Id]);
+      const sessionAfter = await sessionClient.getSession(sessionId);
+      const session2After = await sessionClient.getSession(session2Id);
+      expect(sessionAfter).toBeNull;
+      expect(session2After).toBeNull;
     });
 
     it('should expirate session successfully', async () => {
